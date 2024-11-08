@@ -202,30 +202,25 @@ int q1(char str[])
     4 -> datainicial > datafinal
     Caso o cálculo esteja correto, os atributos qtdDias, qtdMeses e qtdAnos devem ser preenchidos com os valores correspondentes.
  */
-// DiasMesesAnos q2(char datainicial[], char datafinal[])
-// {
-
-//     //calcule os dados e armazene nas três variáveis a seguir
-//     DiasMesesAnos dma;
-
-//     if (q1(datainicial) == 0){
-//       dma.retorno = 2;
-//       return dma;
-//     }else if (q1(datafinal) == 0){
-//       dma.retorno = 3;
-//       return dma;
-//     }else{
-//       //verifique se a data final não é menor que a data inicial
-
-//       //calcule a distancia entre as datas
-
-//       //se tudo der certo
-//       dma.retorno = 1;
-//       return dma;
-
-//     }
-
-// }
+DiasMesesAnos q2(char datainicial[], char datafinal[])
+{
+    //calcule os dados e armazene nas três variáveis a seguir
+    DiasMesesAnos dma;
+    if (q1(datainicial) == 0){
+      dma.retorno = 2;
+      return dma;
+    }else if (q1(datafinal) == 0){
+      dma.retorno = 3;
+      return dma;
+    }else{
+      //verifique se a data final não é menor que a data inicial
+      
+      //calcule a distancia entre as datas
+      //se tudo der certo
+      dma.retorno = 1;
+      return dma;
+    }
+}
 
 // /*
 //  Q3 = encontrar caracter em texto

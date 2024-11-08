@@ -23,7 +23,7 @@
 #ifndef TRABALHO1_CAIOCARDOSO20241160041_H
 #define TRABALHO1_CAIOCARDOSO20241160041_H
 #include <stdio.h>
-#define MAX_DATA 255
+#define MAX_DATA 11
 
 
 typedef struct DQ
