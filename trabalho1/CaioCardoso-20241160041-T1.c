@@ -38,6 +38,7 @@ DataQuebrada quebraData(char data[]);
 @saida
     resultado da soma (x + y)
  */
+
 int somar(int x, int y)
 {
   int soma;
@@ -56,6 +57,7 @@ int somar(int x, int y)
 @saida
     fatorial de x -> x!
  */
+
 int fatorial(int x)
 { // função utilizada para testes
   int i, fat = 1;
@@ -202,10 +204,11 @@ int q1(char str[])
     4 -> datainicial > datafinal
     Caso o cálculo esteja correto, os atributos qtdDias, qtdMeses e qtdAnos devem ser preenchidos com os valores correspondentes.
  */
+
 DiasMesesAnos q2(char datainicial[], char datafinal[])
 {
   DataQuebrada dqInicial, dqFinal;
-
+  int diasMes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
   dqInicial = quebraData(datainicial);
   dqFinal = quebraData(datafinal);
   // calcule os dados e armazene nas três variáveis a seguir
@@ -244,20 +247,25 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
         }
       }
     }
+
     // calcule a distancia entre as datas
     dma.qtdAnos = dqFinal.iAno - dqInicial.iAno;
-    // if (dqInicial.iMes == 1 || dqInicial.iMes == 3 ||
-    //     dqInicial.iMes == 5 || dqInicial.iMes == 7 ||
-    //     dqInicial.iMes == 8 || dqInicial.iMes == 10 || dqInicial.iMes == 12)
-    // {
-    //   if (dqInicial.iDia == dqFinal.iDia + 1)
-    //   {
-    //     dma.qtdMeses = dqFinal.iMes - (dqInicial.iMes + 1);
-    //     dma.qtdDias = 30;
-    //   }
-    // }
     dma.qtdMeses = dqFinal.iMes - dqInicial.iMes;
     dma.qtdDias = dqFinal.iDia - dqInicial.iDia;
+
+    if ((dqFinal.iAno % 4 == 0 && dqFinal.iAno % 100 != 0) || (dqFinal.iAno % 400 == 0))
+      diasMes[1] = 29;
+
+    if (dma.qtdMeses < 0)
+    {
+      dma.qtdAnos--;
+      dma.qtdMeses += 12;
+    }
+    if (dma.qtdDias < 0)
+    {
+      dma.qtdMeses--;
+      dma.qtdDias += diasMes[dqFinal.iMes - 2];
+    }
     // se tudo der certo
     dma.retorno = 1;
     return dma;
@@ -274,6 +282,7 @@ DiasMesesAnos q2(char datainicial[], char datafinal[])
 //  @saida
 //     Um número n >= 0.
 //  */
+
 int q3(char *texto, char c, int isCaseSensitive)
 {
   int qtdOcorrencias = 0;
@@ -316,11 +325,12 @@ int q3(char *texto, char c, int isCaseSensitive)
 //         Observe que o índice da posição no texto deve começar ser contado a partir de 1.
 //         O retorno da função, n, nesse caso seria 1;
 //  */
-// int q4(char *strTexto, char *strBusca, int posicoes[30])
-// {
-//     int qtdOcorrencias = -1;
-//     return qtdOcorrencias;
-// }
+
+int q4(char *strTexto, char *strBusca, int posicoes[30])
+{
+  int qtdOcorrencias = -1;
+  return qtdOcorrencias;
+}
 
 // /*
 //  Q5 = inverte número
@@ -358,7 +368,7 @@ int q5(int num)
 int q6(int numerobase, int numerobusca)
 {
   int qtdOcorrencias = 0;
-  int divisor = 0;
+  int divisor = 1;
   int aux = numerobusca;
 
   while (aux > 0)
@@ -369,13 +379,15 @@ int q6(int numerobase, int numerobusca)
 
   aux = numerobase;
 
-  printf("[%d, %d] ", aux, numerobusca);
   while (aux > 0)
   {
     if (aux % divisor == numerobusca)
+    {
       qtdOcorrencias++;
-
-    aux /= 10;
+      aux /= divisor;
+    }
+    else
+      aux /= 10;
   }
   return qtdOcorrencias;
 }
