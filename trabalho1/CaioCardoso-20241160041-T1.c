@@ -416,7 +416,7 @@ int q6(int numerobase, int numerobusca)
     }
     else
       aux /= 10;
-  }
+  } //
   return qtdOcorrencias;
 }
 
