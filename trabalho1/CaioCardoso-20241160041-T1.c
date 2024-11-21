@@ -24,8 +24,13 @@
 #include <stdio.h>
 #include "CaioCardoso-20241160041-T1.h" // Substitua pelo seu arquivo de header renomeado
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
 DataQuebrada quebraData(char data[]);
+int verificar_vitoria(char tabuleiro[3][3]);
+void painelInsercaoNavios(int tipoUm, int tipoDois, int tipoTres, int tipoOutros, int numNavios, int k, char tabuleiro[10][10]);
+int painelPosicaoNavio(int *posX, int *posY);
 
 /*
 ## função utilizada para testes  ##
@@ -307,7 +312,6 @@ int q3(char *texto, char c, int isCaseSensitive)
       qtdOcorrencias++;
   }
 
-  printf("%s [%d]: ", copiaTexto, qtdOcorrencias);
   return qtdOcorrencias;
 }
 
@@ -328,7 +332,31 @@ int q3(char *texto, char c, int isCaseSensitive)
 
 int q4(char *strTexto, char *strBusca, int posicoes[30])
 {
-  int qtdOcorrencias = -1;
+  int qtdOcorrencias = 0;
+  int iCont = 0, jCont = 0;
+  int kCont = 0;
+  int tam = strlen(strBusca);
+
+  for (; strTexto[iCont]; iCont++)
+  {
+    if (strTexto[iCont] == strBusca[0])
+    {
+      for (jCont = 0; jCont < tam; jCont++)
+      {
+        if (strTexto[iCont + jCont] != strBusca[jCont])
+          break;
+      }
+      if (jCont == tam)
+      {
+        qtdOcorrencias++;
+        posicoes[kCont] = iCont + 1;
+        kCont++;
+        posicoes[kCont] = iCont + jCont;
+        kCont++;
+        iCont += tam - 1;
+      }
+    }
+  }
   return qtdOcorrencias;
 }
 
@@ -459,4 +487,288 @@ DataQuebrada quebraData(char data[])
   dq.valido = 1;
 
   return dq;
+}
+
+int q7()
+{
+  int acabou = 0;
+  char posX;
+  int posY;
+  char X0[3] = {'.', 'X', '0'};
+  int iCont, jCont, kCont = 0;
+  int aux = 0;
+  char tabuleiro[3][3];
+
+  for (iCont = 0; iCont < 3; iCont++)
+    for (jCont = 0; jCont < 3; jCont++)
+      tabuleiro[iCont][jCont] = ' ';
+
+  while (acabou < 9)
+  {
+    for (iCont = 0; iCont < 3; iCont++)
+    {
+      for (jCont = 0; jCont < 3; jCont++)
+      {
+        printf("%c", tabuleiro[iCont][jCont]);
+        if (jCont < 2)
+          printf(" | ");
+      }
+      printf("\n-----------\n");
+    }
+
+    printf("\nVez do jogador %d\n", kCont + 1);
+    scanf(" %c", &posX);
+    scanf(" %d", &posY);
+
+    if (posX >= 'a' && posX <= 'z')
+      posX -= 32;
+
+    switch (posX)
+    {
+    case 'A':
+    {
+      aux = 1;
+      break;
+    }
+    case 'B':
+    {
+      aux = 2;
+      break;
+    }
+    case 'C':
+    {
+      aux = 3;
+      break;
+    }
+    }
+
+    if (tabuleiro[aux - 1][posY - 1] == ' ' && aux >= 1 && aux <= 3 && posY >= 1 && posY <= 3)
+    {
+      kCont++;
+      tabuleiro[aux - 1][posY - 1] = X0[kCont];
+      if (verificar_vitoria(tabuleiro))
+      {
+        acabou = 10;
+        printf("TEMOS UM VENCEDOR!!!!\n");
+      }
+    }
+    else
+    {
+      printf("Local ja foi assinalado, ou nao existe!\n");
+      acabou--;
+    }
+    if (kCont == 2)
+      kCont = 0;
+
+    acabou++;
+  }
+
+  for (iCont = 0; iCont < 3; iCont++)
+  {
+    for (jCont = 0; jCont < 3; jCont++)
+    {
+      printf("%c", tabuleiro[iCont][jCont]);
+      if (jCont < 2)
+        printf(" | ");
+    }
+    if (iCont < 2)
+      printf("\n-----------\n");
+  }
+
+  if (acabou == 9)
+  {
+    printf("\n\nEmpate!\n");
+  }
+  return 0;
+}
+
+int verificar_vitoria(char tabuleiro[3][3])
+{
+  for (int i = 0; i < 3; i++)
+    if (tabuleiro[i][0] == tabuleiro[i][1] && tabuleiro[i][1] == tabuleiro[i][2] && tabuleiro[i][0] != ' ')
+      return 1;
+
+  for (int j = 0; j < 3; j++)
+    if (tabuleiro[0][j] == tabuleiro[1][j] && tabuleiro[1][j] == tabuleiro[2][j] && tabuleiro[0][j] != ' ')
+      return 1;
+
+  if (tabuleiro[0][0] == tabuleiro[1][1] && tabuleiro[1][1] == tabuleiro[2][2] && tabuleiro[0][0] != ' ')
+    return 1;
+
+  if (tabuleiro[0][2] == tabuleiro[1][1] && tabuleiro[1][1] == tabuleiro[2][0] && tabuleiro[0][2] != ' ')
+    return 1;
+
+  return 0;
+}
+
+int q8()
+{
+  int acabou = 0;
+  int numNavios = 6;
+  char tipo1[4] = {'N', 'N', 'N', 'N'};
+  char tipo2[3] = {'N', 'N', 'N'};
+  char tipo3[1] = {'N'};
+  char tipo4[2] = {'N', 'N'};
+  int tipoUm = 2;
+  int tipoDois = 1;
+  int tipoTres = 3;
+  int tipoOutros = 0;
+  char tabuleiro[10][10];
+  int i, k = 0;
+
+  if (tipoUm + tipoDois + tipoTres + tipoOutros < 5 || tipoUm + tipoDois + tipoTres + tipoOutros != numNavios)
+    return 0;
+
+  for (i = 0; i < 10; i++)
+  {
+    for (int j = 0; j < 10; j++)
+    {
+      tabuleiro[i][j] = ' ';
+    }
+  }
+
+  painelInsercaoNavios(tipoUm, tipoDois, tipoTres, tipoOutros, numNavios, k, tabuleiro);
+
+  while (!acabou)
+  {
+    for (i = 0; i < 10; i++)
+    {
+      for (int j = 0; j < 10; j++)
+      {
+        printf("[ %c ] ", tabuleiro[i][j]);
+      }
+      printf("\n");
+    }
+    acabou++;
+  }
+}
+
+void painelInsercaoNavios(int tipoUm, int tipoDois, int tipoTres, int tipoOutros, int numNavios, int k, char tabuleiro[10][10])
+{
+  for (int i = 0; i < 10; i++)
+  {
+    for (int j = 0; j < 10; j++)
+    {
+      printf("[ %c ] ", tabuleiro[i][j]);
+    }
+    printf("\n");
+  }
+  int posX;
+  int posY;
+  int sairPainel = false;
+
+  do
+  {
+    printf("Painel Insercao de navios! Voce Possui %d Navios\n", numNavios);
+    printf("Tipo 1 - Navio tamanho 4\n");
+    printf("Tipo 2 - Navio tamanho 3\n");
+    printf("Tipo 3 - Navio tamanho 1\n");
+    printf("Tipo 4 - Navio tamanho 2\n");
+    int escolha;
+    scanf("%d", &escolha);
+    switch (escolha)
+    {
+    case 1:
+    {
+      if (tipoUm)
+      {
+        int retorno = painelPosicaoNavio(&posX, &posY);
+        if (retorno == 1)
+          if ((posX >= 0 && posY >= 0) && (tabuleiro[posX][posY] == ' ' && tabuleiro[posX][posY + 1] == ' ' && tabuleiro[posX][posY + 2] == ' ' && tabuleiro[posX][posY + 3] == ' '))
+          {
+            tabuleiro[posX][posY] = 'N';
+            tabuleiro[posX][posY + 1] = 'N';
+            tabuleiro[posX][posY + 2] = 'N';
+            tabuleiro[posX][posY + 3] = 'N';
+            tipoUm--;
+            numNavios--;
+          }
+        if (retorno == 2)
+          if ((posX >= 0 && posY >= 0) && (tabuleiro[posX][posY] == ' ' && tabuleiro[posX + 1][posY] == ' ' && tabuleiro[posX + 2][posY] == ' ' && tabuleiro[posX + 3][posY] == ' '))
+          {
+            tabuleiro[posX][posY] = 'N';
+            tabuleiro[posX + 1][posY] = 'N';
+            tabuleiro[posX + 2][posY] = 'N';
+            tabuleiro[posX + 3][posY] = 'N';
+            tipoUm--;
+            numNavios--;
+          }
+        // if (painelPosicaoNavio(&posX, &posY) == 3)
+        //   ;
+        // if (painelPosicaoNavio(&posX, &posY) == 4)
+        //   ;
+      }
+      break;
+    }
+    case 2:
+    {
+      break;
+    }
+    case 3:
+    {
+      break;
+    }
+    case 4:
+    {
+      break;
+    }
+    default:
+      sairPainel++;
+    }
+  } while (numNavios && !sairPainel);
+
+  // if (tipoDois && (posX != -1 && posY != -1) && (tabuleiro[posX][posY] == ' ' && tabuleiro[posX + 1][posY] == ' ' && tabuleiro[posX + 2][posY] == ' ' && tabuleiro[posX + 3][posY] == ' '))
+  // {
+  //   tabuleiro[posX][posY] = 'N';
+  //   tabuleiro[posX + 1][posY] = 'N';
+  //   tabuleiro[posX + 2][posY] = 'N';
+  //   tabuleiro[posX + 3][posY] = 'N';
+  //   tipoUm--;
+  // }
+}
+
+int painelPosicaoNavio(int *posX, int *posY)
+{
+  printf("Qual a direcao que deseja posicionar o navio\n");
+  printf("1 - Horizontal\n");
+  printf("2 - Vertical\n");
+  printf("3 - Diagonal direita\n");
+  printf("4 - Diagonal esquerda\n");
+  int escolhaN;
+  scanf("%d", &escolhaN);
+  switch (escolhaN)
+  {
+  case 1:
+  {
+    scanf("%d", posX);
+    scanf("%d", posY);
+    (*posX)--;
+    (*posY)--;
+    return 1;
+  }
+  case 2:
+  {
+    scanf("%d", posX);
+    scanf("%d", posY);
+    (*posX)--;
+    (*posY)--;
+    return 2;
+  }
+  case 3:
+  {
+    scanf("%d", posX);
+    scanf("%d", posY);
+    (*posX)--;
+    (*posY)--;
+    return 3;
+  }
+  case 4:
+  {
+    scanf("%d", posX);
+    scanf("%d", posY);
+    (*posX)--;
+    (*posY)--;
+    return 4;
+  }
+  }
 }

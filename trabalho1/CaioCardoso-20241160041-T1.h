@@ -52,6 +52,8 @@ int q3(char *texto, char c, int isCaseSensitive);
 int q4(char *strTexto, char *strBusca, int posicoes[30]);
 int q5(int num);
 int q6(int numerobase, int numerobusca);
+int q7();
+int q8();
 DataQuebrada quebraData(char data[]);
 
 #endif  // TRABALHO1_CAIOCARDOSO20241160041_H
