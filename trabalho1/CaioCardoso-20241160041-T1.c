@@ -540,6 +540,7 @@ int q7()
       aux = 3;
       break;
     }
+    default : aux = 0;
     }
 
     if (tabuleiro[aux - 1][posY - 1] == ' ' && aux >= 1 && aux <= 3 && posY >= 1 && posY <= 3)
