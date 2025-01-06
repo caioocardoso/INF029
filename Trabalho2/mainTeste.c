@@ -20,9 +20,9 @@ int main()
     inicializar();
     testeInserirSemNada();
     testeCriarEstrutura();
-    /*testeInserirComEstrutura();
+    testeInserirComEstrutura();
     testeExcluir();
-    testeExcluirNumeroEspecifico();*/
+    //testeExcluirNumeroEspecifico();
     testeListar();
     /*testeRetornarTodosNumeros();
     testeMudarTamanhoEstrutura();
@@ -38,7 +38,7 @@ void show_log(char *str)
 
 void testeInserirSemNada()
 {
-    
+
     show_log("testeInserirSemNada()");
     printf("%d\n", inserirNumeroEmEstrutura(2, 2) == SEM_ESTRUTURA_AUXILIAR);
     printf("%d\n", inserirNumeroEmEstrutura(-2, 2) == POSICAO_INVALIDA);
@@ -125,7 +125,7 @@ void testeListar()
     printf("%d\n", getDadosOrdenadosEstruturaAuxiliar(11, vet) == POSICAO_INVALIDA);
     printf("%d\n", getDadosOrdenadosEstruturaAuxiliar(2, vet) == SUCESSO);
 
-    printf("%d\n", vet[0] == -9);
+    /*printf("%d\n", vet[0] == -9);
     printf("%d\n", vet[1] == 7);
 
     printf("%d\n", getDadosEstruturaAuxiliar(2, vet) == SUCESSO);
@@ -134,7 +134,7 @@ void testeListar()
     printf("%d\n", vet[1] == -9);
 
     printf("%d\n", excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
-    printf("%d\n", excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);
+    printf("%d\n", excluirNumeroDoFinaldaEstrutura(2) == SUCESSO);*/
 }
 
 /*

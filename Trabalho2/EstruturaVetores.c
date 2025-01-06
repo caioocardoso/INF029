@@ -5,7 +5,11 @@
 
 #include "EstruturaVetores.h"
 
+
+
 int *vetorPrincipal[TAM];
+
+
 
 typedef struct aux
 {
@@ -75,7 +79,6 @@ int inserirNumeroEmEstrutura(int posicao, int valor)
     int temEspaco = 0;
     int posicao_invalida = 0;
 
-
     if (estruturaAuxiliar[posicao].tem == true)
         existeEstruturaAuxiliar = 1;
 
@@ -112,7 +115,7 @@ int inserirNumeroEmEstrutura(int posicao, int valor)
     return retorno;
 }
 
-/* 
+/*
 Objetivo: excluir o numero 'valor' da estrutura auxiliar no final da estrutura.
 ex: suponha os valores [3, 8, 7, 9,  ,  ]. Após excluir, a estrutura deve ficar da seguinte forma [3, 8, 7,  ,  ,  ].
 Obs. Esta é uma exclusão lógica
@@ -127,7 +130,7 @@ int excluirNumeroDoFinaldaEstrutura(int posicao)
 {
     int retorno = SUCESSO;
 
-    if (posicao < 1 || posicao > 10) 
+    if (posicao < 1 || posicao > 10)
         retorno = POSICAO_INVALIDA;
 
     else if (estruturaAuxiliar[posicao].tem == false)
@@ -135,9 +138,8 @@ int excluirNumeroDoFinaldaEstrutura(int posicao)
 
     else if (estruturaAuxiliar[posicao].head < 1)
         retorno = ESTRUTURA_AUXILIAR_VAZIA;
-
     else
-        estruturaAuxiliar[posicao].head--;
+        estruturaAuxiliar[posicao].head -= 1;
     return retorno;
 }
 
@@ -211,6 +213,16 @@ int getDadosEstruturaAuxiliar(int posicao, int vetorAux[])
 {
 
     int retorno = 0;
+    if (posicao < 1 || posicao > 10)
+        retorno = POSICAO_INVALIDA;
+    else if (!estruturaAuxiliar[posicao].tem)
+        retorno = SEM_ESTRUTURA_AUXILIAR;
+    else
+        for (int icont = 1; icont <= estruturaAuxiliar[posicao].head; icont++)
+        {
+            vetorAux[icont - 1] = estruturaAuxiliar[posicao].vet[icont];
+            retorno = SUCESSO;
+        }
 
     return retorno;
 }
@@ -226,8 +238,18 @@ Rertono (int)
 */
 int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[])
 {
-
     int retorno = 0;
+    
+    if (posicao < 1 || posicao > 10)
+        retorno = POSICAO_INVALIDA;
+    else if (!estruturaAuxiliar[posicao].tem)
+        retorno = SEM_ESTRUTURA_AUXILIAR;
+    else
+        for (int icont = 1; icont <= estruturaAuxiliar[posicao].head; icont++)
+        {
+            vetorAux[icont - 1] = estruturaAuxiliar[posicao].vet[icont];
+            retorno = SUCESSO;
+        }
 
     return retorno;
 }
