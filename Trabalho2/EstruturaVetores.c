@@ -242,20 +242,31 @@ int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[])
         retorno = SEM_ESTRUTURA_AUXILIAR;
     else
     {
-        int jcont = 0, aux, counter;
-        for (int icont = 1; icont <= vetorPrincipal[posicao].head; icont++)
+         for (int i = 0; i <= vetorPrincipal[posicao].head; i++)
         {
-            for (jcont = icont + 1, aux = vetorPrincipal[posicao].vet[icont], counter = icont; jcont <= vetorPrincipal[posicao].head; jcont++)
+            vetorAux[i] = vetorPrincipal[posicao].vet[i];
+        }
+
+        for (int i = 0; i <= vetorPrincipal[posicao].head; i++)
+        {
+            int minIndex = i;
+            for (int j = i + 1; j <= vetorPrincipal[posicao].head; j++)
             {
-                if (aux > vetorPrincipal[posicao].vet[jcont])
+                if (vetorAux[j] < vetorAux[minIndex])
                 {
-                    counter = jcont;
+                    minIndex = j;
                 }
             }
-            vetorAux[icont - 1] = vetorPrincipal[posicao].vet[counter];
-            printf("[ %d ] ", vetorAux[icont]);
-            retorno = SUCESSO;
+
+            if (minIndex != i)
+            {
+                int temp = vetorAux[i];
+                vetorAux[i] = vetorAux[minIndex];
+                vetorAux[minIndex] = temp;
+            }
         }
+
+        retorno = SUCESSO;
     }
 
     return retorno;
