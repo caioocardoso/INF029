@@ -5,21 +5,15 @@
 
 #include "EstruturaVetores.h"
 
-
-
-int *vetorPrincipal[TAM];
-
-
-
 typedef struct aux
 {
-    int vet[1000];
+    int *vet;
     int head;
     int tamanho;
     int tem;
 } Eauxiliar;
 
-Eauxiliar estruturaAuxiliar[TAM];
+Eauxiliar *vetorPrincipal;
 
 /*
 Objetivo: criar estrutura auxiliar na posição 'posicao'.
@@ -38,7 +32,7 @@ int criarEstruturaAuxiliar(int posicao, int tamanho)
     int retorno = 0;
 
     // a posicao pode já existir estrutura auxiliar
-    if (estruturaAuxiliar[posicao].tem == true)
+    if (vetorPrincipal[posicao].tem == true)
         retorno = JA_TEM_ESTRUTURA_AUXILIAR;
 
     // se posição é um valor válido {entre 1 e 10}
@@ -56,8 +50,9 @@ int criarEstruturaAuxiliar(int posicao, int tamanho)
     // deu tudo certo, crie
     else
     {
-        estruturaAuxiliar[posicao].tamanho = tamanho;
-        estruturaAuxiliar[posicao].tem = true;
+        vetorPrincipal[posicao].vet = malloc(tamanho * sizeof(int));
+        vetorPrincipal[posicao].tamanho = tamanho;
+        vetorPrincipal[posicao].tem = true;
         retorno = SUCESSO;
     }
     return retorno;
@@ -79,10 +74,10 @@ int inserirNumeroEmEstrutura(int posicao, int valor)
     int temEspaco = 0;
     int posicao_invalida = 0;
 
-    if (estruturaAuxiliar[posicao].tem == true)
+    if (vetorPrincipal[posicao].tem == true)
         existeEstruturaAuxiliar = 1;
 
-    if (estruturaAuxiliar[posicao].head < estruturaAuxiliar[posicao].tamanho)
+    if (vetorPrincipal[posicao].head < vetorPrincipal[posicao].tamanho)
         temEspaco = 1;
 
     if (posicao < 1 || posicao > 10)
@@ -98,8 +93,8 @@ int inserirNumeroEmEstrutura(int posicao, int valor)
             if (temEspaco)
             {
                 // insere
-                estruturaAuxiliar[posicao].head += 1;
-                estruturaAuxiliar[posicao].vet[estruturaAuxiliar[posicao].head] = valor;
+                vetorPrincipal[posicao].head += 1;
+                vetorPrincipal[posicao].vet[vetorPrincipal[posicao].head] = valor;
                 retorno = SUCESSO;
             }
             else
@@ -133,13 +128,13 @@ int excluirNumeroDoFinaldaEstrutura(int posicao)
     if (posicao < 1 || posicao > 10)
         retorno = POSICAO_INVALIDA;
 
-    else if (estruturaAuxiliar[posicao].tem == false)
+    else if (vetorPrincipal[posicao].tem == false)
         retorno = SEM_ESTRUTURA_AUXILIAR;
 
-    else if (estruturaAuxiliar[posicao].head < 1)
+    else if (vetorPrincipal[posicao].head < 1)
         retorno = ESTRUTURA_AUXILIAR_VAZIA;
     else
-        estruturaAuxiliar[posicao].head -= 1;
+        vetorPrincipal[posicao].head -= 1;
     return retorno;
 }
 
@@ -164,19 +159,21 @@ int excluirNumeroEspecificoDeEstrutura(int posicao, int valor)
     if (posicao < 1 || posicao > 10)
         retorno = POSICAO_INVALIDA;
 
-    else if (estruturaAuxiliar[posicao].tem == false)
+    else if (vetorPrincipal[posicao].tem == false)
         retorno = SEM_ESTRUTURA_AUXILIAR;
 
-    else if (estruturaAuxiliar[posicao].head < 1)
+    else if (vetorPrincipal[posicao].head < 1)
         retorno = ESTRUTURA_AUXILIAR_VAZIA;
 
     else
     {
-        for (int icont = 1; icont <= estruturaAuxiliar[posicao].head; icont++)
+        for (int icont = 1; icont <= vetorPrincipal[posicao].head; icont++)
         {
-            if (estruturaAuxiliar[posicao].vet[icont] == valor)
+            if (vetorPrincipal[posicao].vet[icont] == valor)
             {
-                estruturaAuxiliar[posicao].vet[icont] = 0;
+                for (int jcont = icont; jcont < vetorPrincipal[posicao].head; jcont++)
+                    vetorPrincipal[posicao].vet[jcont] = vetorPrincipal[posicao].vet[jcont + 1];
+                vetorPrincipal[posicao].head -= 1;
                 achou = true;
                 break;
             }
@@ -212,16 +209,15 @@ Retorno (int)
 int getDadosEstruturaAuxiliar(int posicao, int vetorAux[])
 {
 
-    int retorno = 0;
+    int retorno = SUCESSO;
     if (posicao < 1 || posicao > 10)
         retorno = POSICAO_INVALIDA;
-    else if (!estruturaAuxiliar[posicao].tem)
+    else if (!vetorPrincipal[posicao].tem)
         retorno = SEM_ESTRUTURA_AUXILIAR;
     else
-        for (int icont = 1; icont <= estruturaAuxiliar[posicao].head; icont++)
+        for (int icont = 0; icont < vetorPrincipal[posicao].head; icont++)
         {
-            vetorAux[icont - 1] = estruturaAuxiliar[posicao].vet[icont];
-            retorno = SUCESSO;
+            vetorAux[icont] = vetorPrincipal[posicao].vet[icont + 1];
         }
 
     return retorno;
@@ -239,17 +235,28 @@ Rertono (int)
 int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[])
 {
     int retorno = 0;
-    
+
     if (posicao < 1 || posicao > 10)
         retorno = POSICAO_INVALIDA;
-    else if (!estruturaAuxiliar[posicao].tem)
+    else if (!vetorPrincipal[posicao].tem)
         retorno = SEM_ESTRUTURA_AUXILIAR;
     else
-        for (int icont = 1; icont <= estruturaAuxiliar[posicao].head; icont++)
+    {
+        int jcont = 0, aux, counter;
+        for (int icont = 1; icont <= vetorPrincipal[posicao].head; icont++)
         {
-            vetorAux[icont - 1] = estruturaAuxiliar[posicao].vet[icont];
+            for (jcont = icont + 1, aux = vetorPrincipal[posicao].vet[icont], counter = icont; jcont <= vetorPrincipal[posicao].head; jcont++)
+            {
+                if (aux > vetorPrincipal[posicao].vet[jcont])
+                {
+                    counter = jcont;
+                }
+            }
+            vetorAux[icont - 1] = vetorPrincipal[posicao].vet[counter];
+            printf("[ %d ] ", vetorAux[icont]);
             retorno = SUCESSO;
         }
+    }
 
     return retorno;
 }
@@ -297,10 +304,36 @@ Rertono (int)
 */
 int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho)
 {
-
     int retorno = 0;
+
+    if (posicao < 1 || posicao > 10)
+        retorno = POSICAO_INVALIDA;
+    else if (!vetorPrincipal[posicao].tem)
+        retorno = SEM_ESTRUTURA_AUXILIAR;
+    else
+    {
+        int tamanhoResultante = vetorPrincipal[posicao].tamanho + novoTamanho;
+
+        if (tamanhoResultante < 1)
+            retorno = NOVO_TAMANHO_INVALIDO;
+        else
+        {
+            int *novoVetor = realloc(vetorPrincipal[posicao].vet, tamanhoResultante * sizeof(int));
+            if (novoVetor == NULL)
+                retorno = SEM_ESPACO_DE_MEMORIA;
+            else
+            {
+                vetorPrincipal[posicao].vet = novoVetor;
+                vetorPrincipal[posicao].tamanho = tamanhoResultante;
+                if(novoTamanho < 0)
+                    vetorPrincipal[posicao].head += novoTamanho;
+                retorno = SUCESSO;
+            }
+        }
+    }
     return retorno;
 }
+
 
 /*
 Objetivo: retorna a quantidade de elementos preenchidos da estrutura auxiliar da posição 'posicao'.
@@ -313,9 +346,15 @@ Retorno (int)
 */
 int getQuantidadeElementosEstruturaAuxiliar(int posicao)
 {
-
+    int counter = 0;
     int retorno = 0;
 
+    if (posicao < 1 || posicao > 10)
+        retorno = POSICAO_INVALIDA;
+    else if (!vetorPrincipal[posicao].tem)
+        retorno = SEM_ESTRUTURA_AUXILIAR;
+    else
+        retorno = vetorPrincipal[posicao].head;
     return retorno;
 }
 
@@ -358,10 +397,13 @@ Objetivo: inicializa o programa. deve ser chamado ao inicio do programa
 
 void inicializar()
 {
-    for (int icont = 1; icont <= 10; icont++)
+    vetorPrincipal = malloc(TAM * sizeof(Eauxiliar));
+    for (int icont = 1; icont < TAM; icont++)
     {
-        estruturaAuxiliar[icont].tem = false;
-        estruturaAuxiliar[icont].head = 0;
+        vetorPrincipal[icont].vet = NULL;
+        vetorPrincipal[icont].tem = false;
+        vetorPrincipal[icont].head = 0;
+        vetorPrincipal[icont].tamanho = 0;
     }
 }
 
