@@ -242,7 +242,7 @@ int getDadosOrdenadosEstruturaAuxiliar(int posicao, int vetorAux[])
         retorno = SEM_ESTRUTURA_AUXILIAR;
     else
     {
-         for (int i = 0; i <= vetorPrincipal[posicao].head; i++)
+        for (int i = 0; i <= vetorPrincipal[posicao].head; i++)
         {
             vetorAux[i] = vetorPrincipal[posicao].vet[i];
         }
@@ -282,8 +282,19 @@ Rertono (int)
 */
 int getDadosDeTodasEstruturasAuxiliares(int vetorAux[])
 {
-
-    int retorno = 0;
+    int count = 0;
+    int retorno = TODAS_ESTRUTURAS_AUXILIARES_VAZIAS;
+    for (int icont = 1; icont < TAM; icont++)
+    {
+        if (vetorPrincipal[icont].head != 0 && vetorPrincipal[icont].tem)
+        {
+            retorno = SUCESSO;
+            for (int jcont = 1; jcont <= vetorPrincipal[icont].head; jcont++)
+            {
+                vetorAux[count++] = vetorPrincipal[icont].vet[jcont];
+            }
+        }
+    }
     return retorno;
 }
 
@@ -297,8 +308,37 @@ Rertono (int)
 */
 int getDadosOrdenadosDeTodasEstruturasAuxiliares(int vetorAux[])
 {
+    int count = 0;
+    int retorno = TODAS_ESTRUTURAS_AUXILIARES_VAZIAS;
+    for (int icont = 1; icont < TAM; icont++)
+    {
+        if (vetorPrincipal[icont].head != 0 && vetorPrincipal[icont].tem)
+        {
+            for (int jcont = 1; jcont <= vetorPrincipal[icont].head; jcont++)
+            {
+                vetorAux[count++] = vetorPrincipal[icont].vet[jcont];
+            }
+        }
+    }
 
-    int retorno = 0;
+    for (int i = 0; i < count - 1; i++)
+    {
+        int minIndex = i;
+        for (int j = i + 1; j < count; j++)
+        {
+            if (vetorAux[j] < vetorAux[minIndex])
+            {
+                minIndex = j;
+            }
+        }
+        if (minIndex != i)
+        {
+            int temp = vetorAux[i];
+            vetorAux[i] = vetorAux[minIndex];
+            vetorAux[minIndex] = temp;
+        }
+        retorno = SUCESSO;
+    }
     return retorno;
 }
 
@@ -336,7 +376,7 @@ int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho)
             {
                 vetorPrincipal[posicao].vet = novoVetor;
                 vetorPrincipal[posicao].tamanho = tamanhoResultante;
-                if(novoTamanho < 0)
+                if (novoTamanho < 0)
                     vetorPrincipal[posicao].head += novoTamanho;
                 retorno = SUCESSO;
             }
@@ -344,7 +384,6 @@ int modificarTamanhoEstruturaAuxiliar(int posicao, int novoTamanho)
     }
     return retorno;
 }
-
 
 /*
 Objetivo: retorna a quantidade de elementos preenchidos da estrutura auxiliar da posição 'posicao'.
