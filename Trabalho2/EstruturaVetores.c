@@ -417,9 +417,9 @@ Retorno (No*)
 */
 No *montarListaEncadeadaComCabecote()
 {
-
-    return NULL;
+    
 }
+
 
 /*
 Objetivo: retorna os números da lista enceada com cabeçote armazenando em vetorAux.
@@ -427,6 +427,7 @@ Retorno void
 */
 void getDadosListaEncadeadaComCabecote(No *inicio, int vetorAux[])
 {
+    
 }
 
 /*
