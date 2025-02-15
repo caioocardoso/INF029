@@ -11,16 +11,17 @@ Welcome to GDB Online.
 int main()
 {
     int valor;
-    int i = 0;
+    int i;
     
     scanf("%d", &valor);
+    i = valor;
     
-    while (i <= valor){
+    while (i >= 0){
         printf("%d ", i);
         todosNaturais(&i);
     }
 }
 
 todosNaturais(int *i){
-    *i = *i + 1;
+    *i = *i - 1;
 }
