@@ -12,12 +12,12 @@ void todosNaturais(int n);
 
 int main()
 {
-    todosNaturais(10);
+    todosNaturais(20);
 }
 
 void todosNaturais(int n){
+    printf("%d ", n);
     if (n > 0) {
         todosNaturais(n - 1);
     }
-    printf("%d ", n);
 }
