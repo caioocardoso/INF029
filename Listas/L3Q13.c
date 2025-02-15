@@ -8,20 +8,16 @@ Welcome to GDB Online.
 *******************************************************************************/
 #include <stdio.h>
 
+void todosNaturais(int n);
+
 int main()
 {
-    int valor;
-    int i;
-    
-    scanf("%d", &valor);
-    i = valor;
-    
-    while (i >= 0){
-        printf("%d ", i);
-        todosNaturais(&i);
-    }
+    todosNaturais(10);
 }
 
-todosNaturais(int *i){
-    *i = *i - 1;
+void todosNaturais(int n){
+    if (n > 0) {
+        todosNaturais(n - 1);
+    }
+    printf("%d ", n);
 }
